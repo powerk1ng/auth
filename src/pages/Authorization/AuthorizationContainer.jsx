@@ -1,8 +1,13 @@
 import { useState } from "react";
 import Authorization from "./Authorization";
 import bg from "@/assets/images/login-bg.jpg";
+import { fetchData } from "@/api/requests";
+import { configs } from "@/api/config";
+import User from "@backend/models/user.model";
 
 const AuthorizationContainer = (props) => {
+  const { baseUrl, endpoint } = configs;
+
   const [selectValue, setSelectValue] = useState("");
 
   const [loginFormData, setLoginFormData] = useState({
@@ -16,16 +21,28 @@ const AuthorizationContainer = (props) => {
     role: selectValue,
   });
 
+  const user = new User();
+
   const handleChange = (setData, data, e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (data, e) => {
+  const handleSubmit = async (data, e) => {
     e.preventDefault();
 
-    if (data.hasOwnProperty("role")) {
+    if ("role" in data) {
       setSignUpFormData((prev) => ({ ...prev, role: selectValue }));
+
+      fetchData(`${baseUrl}${endpoint.signup}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
     }
+
+    console.log(user)
   };
 
   return (

@@ -4,6 +4,9 @@ import App from "@/App";
 import Home from "@/pages/Home/Home";
 import PublicRoutes from "./PublicRoutes";
 import ProtectedRoutes from "./ProtectedRoutes";
+import { configs } from "@/api/config";
+
+const { routes } = configs;
 
 export const router = createBrowserRouter([
   {
@@ -11,20 +14,25 @@ export const router = createBrowserRouter([
     element: <PublicRoutes />,
     children: [
       {
-        path: "/",
+        path: routes.home,
         element: <App />,
       },
     ],
   },
-  
+
   {
-    path: "/protected",
+    path: "/private",
     element: <ProtectedRoutes />,
     children: [
       {
-        index: "/home",
+        index: routes.private,
         element: <Home />,
       },
     ],
+  },
+
+  {
+    path: "*",
+    element: <p>Not found</p>,
   },
 ]);
