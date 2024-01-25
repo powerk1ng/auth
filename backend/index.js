@@ -15,6 +15,9 @@ app.listen(4000, () => {
   console.log("listening to port 4000");
 });
 
+// parse requests of content-type - application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: true }));
+
 mongoose
   .connect(process.env.VITE_MONGO)
   .then(() => {
@@ -29,7 +32,7 @@ app.use(signUpRoutes);
 // middleware
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
-  const message = err.message || "Internal Server Error";
+  const message = err.message || 'Internal Server Error';
 
   res.status(statusCode).json({
     success: false,

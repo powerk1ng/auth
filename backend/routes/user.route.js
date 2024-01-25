@@ -5,6 +5,6 @@ const router = express.Router();
 
 // req is the data we send to the api.
 // res is the data we receive from api.
-router.get("/api/user", test);
+router.get("/api/auth/user", test);
 
 export default router;

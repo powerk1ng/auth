@@ -1,9 +1,15 @@
-import { errorHandler } from "../utils/error.js";
+import {
+  errorHandler
+} from "../utils/error.js";
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 
 export const signup = async (req, res, next) => {
-  const { role, email, password } = req.body;
+  const {
+    role,
+    email,
+    password
+  } = req.body;
 
   const validateInputs = (email, password, role) => {
     if (!email || !password || !role || email === "" || password === "" || role === '') {
@@ -24,7 +30,11 @@ export const signup = async (req, res, next) => {
 
     await newUser.save();
     res.json("Signup Successfully");
-  } catch (e) {
-    next(e);
+  } catch (error) {
+    if (error.message.includes("duplicate key error")) {
+      next(errorHandler(400, "Duplicate key error"))
+    } else {
+      next(error)
+    }
   }
 };

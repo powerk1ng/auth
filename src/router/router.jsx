@@ -1,10 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 
-import App from "@/App";
 import Home from "@/pages/Home/Home";
 import PublicRoutes from "./PublicRoutes";
 import ProtectedRoutes from "./ProtectedRoutes";
 import { configs } from "@/api/config";
+import SignUpContainer from "@/pages/Authorization/Signup/SignUpContainer";
+import LoginContainer from "@/pages/Authorization/Login/LoginContainer";
 
 const { routes } = configs;
 
@@ -14,12 +15,15 @@ export const router = createBrowserRouter([
     element: <PublicRoutes />,
     children: [
       {
-        path: routes.home,
-        element: <App />,
+        path: "/signup",
+        element: <SignUpContainer />,
+      },
+      {
+        path: "/login",
+        element: <LoginContainer />,
       },
     ],
   },
-
   {
     path: "/private",
     element: <ProtectedRoutes />,
@@ -30,7 +34,6 @@ export const router = createBrowserRouter([
       },
     ],
   },
-
   {
     path: "*",
     element: <p>Not found</p>,

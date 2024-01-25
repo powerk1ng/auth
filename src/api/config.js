@@ -1,8 +1,10 @@
 export const configs = {
   endpoint: {
-    login: "/login",
-    logOut: "/logout",
-    signup: "/signup",
+    auth: {
+      signIn: "api/auth/signin",
+      logOut: "api/auth/logout",
+      signUp: "api/auth/signup",
+    }
   },
 
   routes: {
@@ -12,5 +14,5 @@ export const configs = {
     forgotPassword: "/forgot-password",
     private: "/private",
   },
-  baseUrl: "http://localhost:4000/api",
+  baseUrl: 'http://localhost:3000'
 };
