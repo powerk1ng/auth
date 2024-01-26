@@ -1,10 +1,10 @@
 export const fetchData = async (url, params) => {
-    const request = await fetch(url, params);
+  const request = await fetch(url, params);
+  const response = await request.json();
 
-    if (!request.ok) {
-      throw new Error(`Could not fetch from ${url}`);
-    }
-
-    const response = await request.json();
+  if (request.ok) {
     return response;
+  }
+
+  return Promise.reject(response)
 };

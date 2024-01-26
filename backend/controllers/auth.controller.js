@@ -29,12 +29,17 @@ export const signup = async (req, res, next) => {
     });
 
     await newUser.save();
-    res.json("Signup Successfully");
+
+    res.json({
+      success: true,
+      message: "User was created successfully",
+      statusCode: 200,
+    });
+    
   } catch (error) {
     if (error.message.includes("duplicate key error")) {
       next(errorHandler(400, "Duplicate key error"))
-    } else {
-      next(error)
     }
+    next(error)
   }
 };

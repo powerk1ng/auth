@@ -1,13 +1,13 @@
-import {
-    shallowEqual,
-    useDispatch,
-    useSelector
-} from "react-redux";
+import { useMemo } from 'react';
+import { useDispatch, useSelector, shallowEqual } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { bindActionCreators } from 'redux';
 
-export const useAppDispatch = useDispatch();
+export const useAppDispatch = () => useDispatch();
 
-export const useShallowEqualSelector = (selector) =>
-    useSelector(selector, shallowEqual);
+export const useShallowEqualSelector = (selector) => {
+    return useSelector(selector, shallowEqual);
+};
 
 export const useActions = (actions, deps) => {
     const dispatch = useAppDispatch();
@@ -18,3 +18,4 @@ export const useActions = (actions, deps) => {
         deps ? [dispatch, ...deps] : [dispatch]
     );
 };
+

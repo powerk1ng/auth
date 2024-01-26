@@ -1,17 +1,18 @@
 import { useMemo, useState } from "react";
 import SignUp from "./SignUp";
 import { useNavigate } from "react-router-dom";
-import { fetchData } from "@/api/requests";
-import { configs } from "@/api/config";
-import { toast } from "react-toastify";
+import { useAppDispatch, useShallowEqualSelector } from "@/hooks/storeHooks";
+import { selectSignUpLoadingState, selectSingUpError } from "@/store/selectors/selectors";
+import { signUpAction } from "@/store/actions/singUpAction";
 
 const SignUpContainer = () => {
-  const { endpoint } = configs;
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
+  const loadingState = useShallowEqualSelector(selectSignUpLoadingState);
+  const error = useShallowEqualSelector(selectSingUpError);
 
   const [selectValue, setSelectValue] = useState("");
-  const [loading, setLoading] = useState(false);
-
   const [signUpFormData, setSignUpFormData] = useState({
     email: "",
     password: "",
@@ -39,37 +40,7 @@ const SignUpContainer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-
-    fetchData(`${endpoint.auth.signUp}`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(signUpFormData),
-    })
-      .then(() => {
-        toast.success("Congratulations! You have successfully signed up", {
-          theme: "light",
-        });
-      })
-      .then(() =>
-        setSignUpFormData({
-          email: "",
-          password: "",
-          confirmPassword: "",
-          role: "",
-        })
-      )
-      .then(() => navigate("/login"))
-      .catch((error) => {
-        console.error("Error during signup:", error);
-        toast.error("Error!", {
-          hideProgressBar: false,
-          theme: "light",
-        });
-      })
-      .finally(() => setLoading(false));
+    dispatch(signUpAction(signUpFormData));
   };
 
   return (
@@ -78,7 +49,7 @@ const SignUpContainer = () => {
       handleChange={handleChange}
       handleSelectionChange={handleSelectionChange}
       handleSubmit={handleSubmit}
-      loading={loading}
+      loading={loadingState}
       onTabChange={onTabChange}
       signUpFormData={signUpFormData}
     />

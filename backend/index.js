@@ -27,7 +27,6 @@ mongoose
 
 app.use(userRoutes);
 app.use(signUpRoutes);
-// app.use(resetRoutes)
 
 // middleware
 app.use((err, req, res, next) => {

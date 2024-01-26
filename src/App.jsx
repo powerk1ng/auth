@@ -8,7 +8,7 @@ import { store } from "@/store/store";
 const App = () => {
   return (
     <Provider store={store}>
-      <ToastContainer limit={1} autoClose={2000} pauseOnHover={false}/>
+      <ToastContainer limit={1} autoClose={2000} pauseOnHover={true} />
       <RouterProvider router={router} />
     </Provider>
   );
