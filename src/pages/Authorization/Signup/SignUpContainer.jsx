@@ -48,6 +48,11 @@ const SignUpContainer = () => {
       },
       body: JSON.stringify(signUpFormData),
     })
+      .then(() => {
+        toast.success("Congratulations! You have successfully signed up", {
+          theme: "light",
+        });
+      })
       .then(() =>
         setSignUpFormData({
           email: "",
@@ -59,7 +64,7 @@ const SignUpContainer = () => {
       .then(() => navigate("/login"))
       .catch((error) => {
         console.error("Error during signup:", error);
-        toast.error('Error!', {
+        toast.error("Error!", {
           hideProgressBar: false,
           theme: "light",
         });
@@ -68,15 +73,15 @@ const SignUpContainer = () => {
   };
 
   return (
-      <SignUp
-        btnIsDisabled={btnIsDisabled}
-        handleChange={handleChange}
-        handleSelectionChange={handleSelectionChange}
-        handleSubmit={handleSubmit}
-        loading={loading}
-        onTabChange={onTabChange}
-        signUpFormData={signUpFormData}
-      />
+    <SignUp
+      btnIsDisabled={btnIsDisabled}
+      handleChange={handleChange}
+      handleSelectionChange={handleSelectionChange}
+      handleSubmit={handleSubmit}
+      loading={loading}
+      onTabChange={onTabChange}
+      signUpFormData={signUpFormData}
+    />
   );
 };
 

@@ -1,8 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import App from "./App";
 import "./global.css";
-import RoutesProvider from "./router/RoutesProvider";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <RoutesProvider />
-);
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
