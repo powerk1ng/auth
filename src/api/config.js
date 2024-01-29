@@ -10,6 +10,7 @@ export const configs = {
   routes: {
     home: "/",
     login: "/login",
+    signUp: "/signup",
     setPassword: "/set-password",
     forgotPassword: "/forgot-password",
     private: "/private",

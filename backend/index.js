@@ -2,7 +2,8 @@ import express from "express";
 import mongoose from "mongoose";
 import "dotenv/config";
 import userRoutes from "./routes/user.route.js";
-import signUpRoutes from "./routes/auth.route.js";
+import signUpRoutes from "./routes/signUp.route.js";
+import singInRoutes from './routes/signIn.route.js';
 import resetRoutes from "./routes/reset.route.js";
 import cors from 'cors';
 
@@ -16,7 +17,9 @@ app.listen(4000, () => {
 });
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({
+  extended: true
+}));
 
 mongoose
   .connect(process.env.VITE_MONGO)
@@ -27,6 +30,7 @@ mongoose
 
 app.use(userRoutes);
 app.use(signUpRoutes);
+app.use(singInRoutes);
 
 // middleware
 app.use((err, req, res, next) => {

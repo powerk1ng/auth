@@ -5,11 +5,11 @@ import { fetchData } from "@/api/requests";
 import { configs } from "@/api/config";
 
 const LoginContainer = () => {
-  const { endpoint } = configs;
+  const { endpoint, routes } = configs;
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
-  
+
   const [loginFormData, setLoginFormData] = useState({
     email: "",
     password: "",
@@ -20,7 +20,7 @@ const LoginContainer = () => {
   };
 
   const onTabChange = () => {
-    navigate("/signup");
+    navigate(routes.signUp);
   };
 
   const btnIsDisabled = useMemo(
@@ -39,9 +39,9 @@ const LoginContainer = () => {
           password: "",
         })
       )
-      .then(() => navigate("/signup"))
+      .then(() => navigate(routes.private))
       .catch((error) => {
-        console.error("Error during signup:", error);
+        console.error("Error during signin:", error);
       })
       .finally(() => setLoading(false));
   };

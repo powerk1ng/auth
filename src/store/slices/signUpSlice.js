@@ -36,7 +36,7 @@ const singUpSlice = createSlice({
             state.message = payload.message
             state.success = payload.success
             state.statusCode = payload.statusCode
-
+            
             toast.success(`${payload.message}`, {
                 theme: "light",
             });

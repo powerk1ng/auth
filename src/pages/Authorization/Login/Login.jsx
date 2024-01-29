@@ -39,7 +39,7 @@ const Login = React.memo((props) => {
         <TabsContent value="login">
           <Card>
             <CardHeader>
-              <CardTitle className="text-center mb-2">Sign Up</CardTitle>
+              <CardTitle className="text-center mb-2">Sign In</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col gap-4">
               <div className="space-y-2">

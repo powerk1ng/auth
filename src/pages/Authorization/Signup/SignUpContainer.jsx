@@ -1,16 +1,16 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import SignUp from "./SignUp";
 import { useNavigate } from "react-router-dom";
 import { useAppDispatch, useShallowEqualSelector } from "@/hooks/storeHooks";
-import { selectSignUpLoadingState, selectSingUpError } from "@/store/selectors/selectors";
+import { selectSignUpLoadingState } from "@/store/selectors/selectors";
 import { signUpAction } from "@/store/actions/singUpAction";
+import { resetSignUpSlice } from "@/store/slices/signUpSlice";
 
 const SignUpContainer = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const loadingState = useShallowEqualSelector(selectSignUpLoadingState);
-  const error = useShallowEqualSelector(selectSingUpError);
 
   const [selectValue, setSelectValue] = useState("");
   const [signUpFormData, setSignUpFormData] = useState({
@@ -19,6 +19,10 @@ const SignUpContainer = () => {
     confirmPassword: "",
     role: selectValue,
   });
+
+  useEffect(() => {
+    dispatch(resetSignUpSlice());
+  }, []);
 
   const handleChange = (e) => {
     setSignUpFormData({ ...signUpFormData, [e.target.name]: e.target.value });
@@ -40,7 +44,11 @@ const SignUpContainer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(signUpAction(signUpFormData));
+    const result = await dispatch(signUpAction(signUpFormData));
+
+    if (result?.payload?.success) {
+      navigate("/login");
+    }
   };
 
   return (
