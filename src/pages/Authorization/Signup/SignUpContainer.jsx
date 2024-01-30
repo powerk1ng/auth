@@ -5,8 +5,10 @@ import { useAppDispatch, useShallowEqualSelector } from "@/hooks/storeHooks";
 import { selectSignUpLoadingState } from "@/store/selectors/selectors";
 import { signUpAction } from "@/store/actions/singUpAction";
 import { resetSignUpSlice } from "@/store/slices/signUpSlice";
+import { configs } from "@/api/config";
 
 const SignUpContainer = () => {
+  const { routes } = configs;
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
@@ -34,7 +36,7 @@ const SignUpContainer = () => {
   };
 
   const onTabChange = () => {
-    navigate("/login");
+    navigate(routes.login);
   };
 
   const btnIsDisabled = useMemo(
@@ -46,8 +48,8 @@ const SignUpContainer = () => {
     e.preventDefault();
     const result = await dispatch(signUpAction(signUpFormData));
 
-    if (result?.payload?.success) {
-      navigate("/login");
+    if (result?.payload?._id) {
+      navigate(routes.login);
     }
   };
 

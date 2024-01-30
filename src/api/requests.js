@@ -1,4 +1,10 @@
-export const fetchData = async (url, params) => {
+export const generalPost = async (url, values, params = {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(values),
+}) => {
   const request = await fetch(url, params);
   const response = await request.json();
 

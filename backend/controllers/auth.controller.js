@@ -67,13 +67,13 @@ export const signIn = async (req, res, next) => {
     })
 
     if (!validUser) {
-      next(errorHandler(404, "User not found"));
+      return next(errorHandler(404, "User not found"));
     }
 
     const validPassword = bcryptjs.compareSync(password, validUser.password)
 
     if (!validPassword) {
-      next(errorHandler(400, 'Invalid password'))
+      return next(errorHandler(400, 'Invalid password'))
     }
 
     const token = jwt.sign({
@@ -84,7 +84,12 @@ export const signIn = async (req, res, next) => {
 
     res.status(200).cookie('access_token', token, {
       httpOnly: true
-    }).json(validUser)
+    }).json({
+      success: true,
+      message: "Successfully signed in",
+      statusCode: res.statusCode,
+      data: validUser
+    })
   } catch (error) {
     next(error)
   }
