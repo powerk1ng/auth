@@ -40,7 +40,9 @@ const singInSlice = createSlice({
             state.statusCode = payload.statusCode
             state.success = payload.success
 
-            toast.error()
+            toast.error(payload.message, {
+                theme: "light",
+            })
         })
 })
 

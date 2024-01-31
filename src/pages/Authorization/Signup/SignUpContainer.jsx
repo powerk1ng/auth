@@ -48,7 +48,7 @@ const SignUpContainer = () => {
     e.preventDefault();
     const result = await dispatch(signUpAction(signUpFormData));
 
-    if (result?.payload?._id) {
+    if (result?.payload?.success) {
       navigate(routes.login);
     }
   };

@@ -70,6 +70,8 @@ export const signIn = async (req, res, next) => {
       return next(errorHandler(404, "User not found"));
     }
 
+    const { password: pass, ...rest } = validUser._doc; 
+
     const validPassword = bcryptjs.compareSync(password, validUser.password)
 
     if (!validPassword) {
@@ -88,7 +90,7 @@ export const signIn = async (req, res, next) => {
       success: true,
       message: "Successfully signed in",
       statusCode: res.statusCode,
-      data: validUser
+      data: rest
     })
   } catch (error) {
     next(error)
