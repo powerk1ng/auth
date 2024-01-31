@@ -8,7 +8,7 @@ export const configs = {
   },
 
   routes: {
-    home: "/",
+    starter: "/",
     login: "/login",
     signUp: "/signup",
     setPassword: "/set-password",

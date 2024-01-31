@@ -34,9 +34,10 @@ const LoginContainer = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const result = await dispatch(signInAction(loginFormData));
+
+    const response = await dispatch(signInAction(loginFormData));
     
-    if (result?.payload?.success) {
+    if (response?.payload?.success) {
       navigate(routes.private);
     }
   };

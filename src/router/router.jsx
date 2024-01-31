@@ -1,4 +1,8 @@
-import { createBrowserRouter } from "react-router-dom";
+import {
+  Route,
+  createBrowserRouter,
+  createRoutesFromElements,
+} from "react-router-dom";
 
 import Home from "@/pages/Home/Home";
 import PublicRoutes from "./PublicRoutes";
@@ -9,33 +13,18 @@ import LoginContainer from "@/pages/Authorization/Login/LoginContainer";
 
 const { routes } = configs;
 
-export const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <PublicRoutes />,
-    children: [
-      { 
-        path: "/signup",
-        element: <SignUpContainer />,
-      },
-      {
-        path: "/login",
-        element: <LoginContainer />,
-      },
-    ],
-  },
-  {
-    path: "/private",
-    element: <ProtectedRoutes />,
-    children: [
-      {
-        index: routes.private,
-        element: <Home />,
-      },
-    ],
-  },
-  {
-    path: "*",
-    element: <p>Not found</p>,
-  },
-]);
+export const router = createBrowserRouter(
+  createRoutesFromElements(
+    <>
+      <Route element={<Home />} path={routes.starter} />
+      <Route element={<PublicRoutes />}>
+        <Route element={<LoginContainer />} path={routes.login} />
+        <Route element={<SignUpContainer />} path={routes.signUp} />
+      </Route>
+      <Route element={<ProtectedRoutes />}>
+        <Route element={<Home />} path={routes.private} />
+      </Route>
+      <Route element={<p>Not Found</p>} path="*" />
+    </>
+  )
+);

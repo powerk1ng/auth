@@ -1,10 +1,12 @@
-export const generalPost = async (url, values, params = {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json",
-  },
-  body: JSON.stringify(values),
-}) => {
+export const generalPost = async (url, values) => {
+  const params = {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(values),
+  }
+
   const request = await fetch(url, params);
   const response = await request.json();
 
