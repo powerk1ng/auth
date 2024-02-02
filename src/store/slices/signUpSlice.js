@@ -1,6 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { signUpAction } from "../actions/singUpAction";
-import { toast } from "react-toastify";
+import {
+    createSlice
+} from "@reduxjs/toolkit";
+import {
+    signUpAction
+} from "../actions/singUpAction";
+import {
+    toast
+} from "react-toastify";
 
 const initialState = {
     isLoading: false,
@@ -30,9 +36,10 @@ const singUpSlice = createSlice({
             state.message = payload.message
             state.success = payload.success
             state.statusCode = payload.statusCode
-            
+
             toast.success(`${payload.message}`, {
                 theme: "light",
+                toastId: "toast",
             });
         })
 
@@ -46,9 +53,12 @@ const singUpSlice = createSlice({
 
             toast.error(`${payload.message}`, {
                 theme: "light",
+                toastId: "toast",
             });
         })
 })
 
-export const { resetSignUpSlice } = singUpSlice.actions;
+export const {
+    resetSignUpSlice
+} = singUpSlice.actions;
 export default singUpSlice.reducer;

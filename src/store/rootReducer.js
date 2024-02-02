@@ -3,6 +3,6 @@ import singUpReducer from './slices/signUpSlice';
 import singInReducer from './slices/signInSlice';
 
 export const rootReducer = combineReducers({
-    singUpReducer,
-    singInReducer,  
+    signIn: singInReducer,  
+    singUp: singUpReducer,
 })

@@ -11,10 +11,10 @@ const initialState = {
     success: false,
     statusCode: "",
     message: "",
-    data: ""
+    currentUser: ""
 }
 
-const singInSlice = createSlice({
+export const singInSlice = createSlice({
     name: "signInSlice",
     initialState,
     reducers: {},
@@ -27,7 +27,7 @@ const singInSlice = createSlice({
             payload
         }) => {
             state.isLoading = false;
-            state.data = payload.data;
+            state.currentUser = payload.currentUser;
             state.success = payload.success;
             state.message = payload.message;
             state.statusCode = payload.statusCode;
@@ -42,6 +42,7 @@ const singInSlice = createSlice({
 
             toast.error(payload.message, {
                 theme: "light",
+                toastId: 'toast'
             })
         })
 })
