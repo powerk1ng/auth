@@ -6,6 +6,8 @@ import bcryptjs from "bcryptjs";
 import jwt from 'jsonwebtoken';
 import "dotenv/config";
 
+
+//sign up
 export const signup = async (req, res, next) => {
   const {
     role,
@@ -46,7 +48,10 @@ export const signup = async (req, res, next) => {
   }
 };
 
+
+// sign in
 export const signIn = async (req, res, next) => {
+
   const {
     email,
     password
@@ -78,22 +83,33 @@ export const signIn = async (req, res, next) => {
     const validPassword = bcryptjs.compareSync(password, validUser.password)
 
     if (!validPassword) {
-      return next(errorHandler(400, 'Invalid password'))
+      return next(errorHandler(400, 'Invalid email or password'))
     }
 
-    const token = jwt.sign({
-      id: validUser._id
+    const access_token = jwt.sign({
+      id: validUser._id,
+      // role: validUser.role,
     }, process.env.VITE_JWT_SECRET, {
-      expiresIn: "1h"
+      expiresIn: "1hr"
     })
 
-    res.status(200).cookie('access_token', token, {
-      httpOnly: true
-    }).json({
+    const refresh_token = jwt.sign({
+      id: validUser._id
+    }, process.env.VITE_REFRESH_JWT_SECRET, {
+      expiresIn: "1d"
+    })
+
+    res.status(200).cookie('token', refresh_token, {
+      httpOnly: true,
+      secure: false,
+      maxAge: 1 * 24 * 60 * 60 * 1000 //matches refresh token
+    })
+
+    res.json({
       success: true,
       message: "Successfully signed in",
       statusCode: res.statusCode,
-      currentUser: rest
+      currentUser: access_token
     })
 
   } catch (error) {

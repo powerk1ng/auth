@@ -4,6 +4,7 @@ export const configs = {
       signIn: "api/auth/signin",
       logOut: "api/auth/logout",
       signUp: "api/auth/signup",
+      refresh: "/api/auth/refresh",
     }
   },
 

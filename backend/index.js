@@ -1,16 +1,21 @@
 import express from "express";
 import mongoose from "mongoose";
-import "dotenv/config";
-import userRoutes from "./routes/user.route.js";
 import signUpRoutes from "./routes/signUp.route.js";
 import singInRoutes from './routes/signIn.route.js';
-import resetRoutes from "./routes/reset.route.js";
+import refreshRoutes from './routes/refresh.route.js';
+import logoutRoutes from './routes/logout.route.js';
+
 import cors from 'cors';
+import "dotenv/config";
+import cookieParser from "cookie-parser";
+
 
 const app = express();
 
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser())
+
 
 app.listen(4000, () => {
   console.log("listening to port 4000");
@@ -33,6 +38,7 @@ app.use(express.urlencoded({
   extended: true
 }));
 
+
 mongoose
   .connect(process.env.VITE_MONGO)
   .then(() => {
@@ -40,9 +46,11 @@ mongoose
   })
   .catch((e) => console.log(e));
 
-app.use(userRoutes);
-app.use(signUpRoutes);
-app.use(singInRoutes);
+  app.use(signUpRoutes);
+  app.use(singInRoutes);
+  app.use(refreshRoutes);
+  app.use(logoutRoutes);
+
 
 // middleware
 app.use((err, req, res, next) => {

@@ -5,12 +5,14 @@ import { configs } from "@/api/config";
 import { signInAction } from "@/store/actions/singInAction";
 import { useAppDispatch, useShallowEqualSelector } from "@/hooks/storeHooks";
 import { selectSignInLoadingState } from "@/store/selectors/selectors";
+import useAuthContext from "@/hooks/useAuthContext";
 
 const LoginContainer = () => {
   const loading = useShallowEqualSelector(selectSignInLoadingState);
+  const { dispatch } = useAuthContext();
 
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
+  const dispatchApp = useAppDispatch();
 
   const { routes } = configs;
 
@@ -35,9 +37,12 @@ const LoginContainer = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const response = await dispatch(signInAction(loginFormData));
-    
+    const response = await dispatchApp(signInAction(loginFormData));
+
     if (response?.payload?.success) {
+      dispatch({ type: "LOGIN", payload: response.payload.currentUser });
+      
+      localStorage.setItem("user", response.payload.currentUser);
       navigate(routes.private);
     }
   };
