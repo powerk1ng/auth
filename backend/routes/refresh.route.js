@@ -1,8 +1,7 @@
 import express from "express";
-import { refresh } from "../controllers/auth.refreshController.js";
+import { refresh } from '../controllers/auth.refresh.js';
 
 const router = express.Router();
-router.post("/api/auth/refresh", refresh);
-
+router.get("/api/auth/refresh", refresh);
 
 export default router;

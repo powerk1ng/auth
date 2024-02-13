@@ -1,31 +1,23 @@
  import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema(
-  {
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
+ const {
+   Schema,
+   model
+ } = mongoose;
 
-    password: {
-      type: String,
-      required: true,
-    },
+ const userSchema = new Schema({
+   email: {
+     type: String,
+     required: true,
+     unique: true,
+     collation: { locale: 'en', strength: 2 }
+   },
+   password: {
+     type: String,
+     required: true,
+   },
+ }, {
+   timestamps: true
+ });
 
-    role: {
-      type: String,
-      required: true,
-    },
-
-    confirmPassword: {
-      type: String,
-      required: false,  
-    },
-  },
-  { timestamps: true } // time of creation and time of update.
-);
-
-const User = mongoose.model("User", userSchema); //User without 's' at the end. MangoDb will add 's' automatically.
-
-export default User;
+ export default model("User", userSchema); //User without 's' at the end. MangoDb will add 's' automatically.

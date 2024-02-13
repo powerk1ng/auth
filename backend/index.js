@@ -4,6 +4,7 @@ import signUpRoutes from "./routes/signUp.route.js";
 import singInRoutes from './routes/signIn.route.js';
 import refreshRoutes from './routes/refresh.route.js';
 import logoutRoutes from './routes/logout.route.js';
+import getUserRoutes from './routes/users.route.js';
 
 import cors from 'cors';
 import "dotenv/config";
@@ -11,16 +12,18 @@ import cookieParser from "cookie-parser";
 
 
 const app = express();
+const PORT = process.env.PORT || 4000;
 
-app.use(express.json());
-app.use(cors());
-app.use(cookieParser())
-
-
-app.listen(4000, () => {
-  console.log("listening to port 4000");
+process.on('uncaughtException', function (err) {
+  console.log(err);
 });
 
+app.use(express.json());
+app.use(cors({
+  credentials: true,
+  origin: "http://localhost:3000"
+}));
+app.use(cookieParser())
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
@@ -33,10 +36,12 @@ app.use((req, res, next) => {
   );
   next();
 });
-
 app.use(express.urlencoded({
   extended: true
 }));
+app.listen(PORT, () => {
+  console.log(`listening to port ${PORT}`);
+});
 
 
 mongoose
@@ -46,10 +51,12 @@ mongoose
   })
   .catch((e) => console.log(e));
 
-  app.use(signUpRoutes);
-  app.use(singInRoutes);
-  app.use(refreshRoutes);
-  app.use(logoutRoutes);
+// routes
+app.use(signUpRoutes);
+app.use(singInRoutes);
+app.use(refreshRoutes);
+app.use(logoutRoutes);
+app.use(getUserRoutes);
 
 
 // middleware

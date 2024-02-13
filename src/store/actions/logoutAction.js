@@ -16,8 +16,7 @@ export const logoutAction = createAsyncThunk('logoutSlice', async (_, {
     rejectWithValue
 }) => {
     try {
-        const res = generalPost(endpoint.auth.logOut);
-        return res;
+        return generalPost(endpoint.auth.logOut);
     } catch (error) {
         console.log(error);
 

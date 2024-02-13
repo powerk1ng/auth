@@ -1,14 +1,15 @@
-import { createContext, useEffect, useReducer } from "react";
+import Loader from "@/components/Loader";
+import { createContext, useEffect, useReducer, useState } from "react";
 
 export const AuthContext = createContext(null);
 
 export const authReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
-      return { user: action.payload };
+      return { token: action.payload };
 
     case "LOGOUT":
-      return { user: null };
+      return { token: null };
 
     default:
       return state;
@@ -17,18 +18,28 @@ export const authReducer = (state, action) => {
 
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, {
-    user: null,
+    token: null,
   });
 
-  useEffect(() => {
-    const user = localStorage.getItem("user");
+  const [loading, setLoading] = useState(true);
 
-    if (user) {
-      dispatch({ type: "LOGIN", payload: user });
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      dispatch({ type: "LOGIN", payload: token });
     }
+
+    setLoading(false);
   }, []);
 
-  console.log("AutContext state: ", state);
+  if (loading) {
+    return (
+      <div className="bg-black/80 grid place-content-center min-h-screen">
+        <Loader width={80} height={80} />
+      </div>
+    );
+  }
 
   return (
     <AuthContext.Provider value={{ ...state, dispatch }}>

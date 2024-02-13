@@ -1,6 +1,5 @@
 import { useMemo } from 'react';
 import { useDispatch, useSelector, shallowEqual } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 
 export const useAppDispatch = () => useDispatch();

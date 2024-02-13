@@ -1,7 +1,6 @@
 import express from "express";
-import {
-    logOut
-} from "../controllers/auth.logoutController.js";
+import { logOut } from "../controllers/auth.logout.js";
+
 
 const router = express.Router();
 router.post("/api/auth/logout", logOut);

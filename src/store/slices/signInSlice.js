@@ -11,7 +11,7 @@ const initialState = {
     success: false,
     statusCode: "",
     message: "",
-    currentUser: ""
+    data: ""
 }
 
 export const singInSlice = createSlice({
@@ -27,7 +27,7 @@ export const singInSlice = createSlice({
             payload
         }) => {
             state.isLoading = false;
-            state.currentUser = payload.currentUser;
+            state.data = payload.data;
             state.success = payload.success;
             state.message = payload.message;
             state.statusCode = payload.statusCode;

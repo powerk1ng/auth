@@ -40,9 +40,9 @@ const LoginContainer = () => {
     const response = await dispatchApp(signInAction(loginFormData));
 
     if (response?.payload?.success) {
-      dispatch({ type: "LOGIN", payload: response.payload.currentUser });
-      
-      localStorage.setItem("user", response.payload.currentUser);
+      dispatch({ type: "LOGIN", payload: response.payload.data.tokens});
+
+      localStorage.setItem("token", response.payload.data.tokens.accessToken);
       navigate(routes.private);
     }
   };

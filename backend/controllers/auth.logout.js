@@ -1,7 +1,11 @@
-export const logOut = async (req, res) => {
-    const cookies = req.cookies;
+import Token from "../models/token.model.js";
 
-    if (!cookies || !cookies.token) {
+export const logOut = async (req, res) => {
+    const {
+        refreshToken
+    } = req.cookies;
+
+    if (!refreshToken) {
         return res.status(204).json({
             message: 'No content',
             success: false,
@@ -9,7 +13,11 @@ export const logOut = async (req, res) => {
         });
     }
 
-    res.clearCookie('token', {
+    const tokenData = await Token.deleteOne({
+        refreshToken: refreshToken
+    })
+
+    res.clearCookie('refreshToken', {
         httpOnly: true,
         secure: false,
     }).json({
@@ -17,4 +25,6 @@ export const logOut = async (req, res) => {
         success: true,
         statusCode: res.statusCode
     });
+
+    return tokenData;
 };

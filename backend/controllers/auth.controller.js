@@ -3,53 +3,75 @@ import {
 } from "../utils/error.js";
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
-import jwt from 'jsonwebtoken';
 import "dotenv/config";
+import {
+  generateToken,
+  saveToken
+} from "../utils/index.js";
+import Token from "../models/token.model.js";
 
-
-//sign up
+//sign up ================================================================================================================
 export const signup = async (req, res, next) => {
   const {
-    role,
     email,
     password
   } = req.body;
 
-  const validateInputs = (email, password, role) => {
-    if (!email || !password || !role || email === "" || password === "" || role === '') {
+  const validateInputs = (email, password) => {
+    if (!email || !password || email === "" || password === "") {
       next(errorHandler(400, "All fields are required"));
     }
   };
 
   try {
-    validateInputs(role, email, password);
+    validateInputs(email, password);
 
     const hashedPassword = bcryptjs.hashSync(password, 10);
 
     const newUser = new User({
       email,
-      role,
       password: hashedPassword,
     });
 
+    const tokens = generateToken({
+      id: newUser._id
+    });
+
+    const existingUser = await User.findOne({
+      email
+    })
+
+    if (existingUser) {
+      return next(errorHandler(400, "Duplicate key error"))
+    }
+
     await newUser.save();
+    await saveToken(newUser._id, tokens.refreshToken);
+
+    res.cookie('refreshToken', tokens.refreshToken, {
+      httpOnly: true,
+      secure: false, // Set to true if using HTTPS
+      maxAge: 180 * 60 * 1000 // matches the refresh token expiration time
+    });
 
     res.json({
       success: true,
       message: "User was created successfully",
       statusCode: 200,
+      data: {
+        user: newUser._id,
+        tokens
+      }
     });
 
   } catch (error) {
-    if (error.message.includes("duplicate key error")) {
-      next(errorHandler(400, "Duplicate key error"))
-    }
     next(error)
   }
 };
 
 
-// sign in
+
+// sign in ==========================================================================================================================
 export const signIn = async (req, res, next) => {
 
   const {
@@ -63,7 +85,6 @@ export const signIn = async (req, res, next) => {
     }
   };
 
-
   try {
     validateInputs(email, password);
 
@@ -75,41 +96,40 @@ export const signIn = async (req, res, next) => {
       return next(errorHandler(404, "User not found"));
     }
 
-    const {
-      password: pass,
-      ...rest
-    } = validUser._doc;
-
     const validPassword = bcryptjs.compareSync(password, validUser.password)
 
     if (!validPassword) {
       return next(errorHandler(400, 'Invalid email or password'))
     }
 
-    const access_token = jwt.sign({
-      id: validUser._id,
-      // role: validUser.role,
-    }, process.env.VITE_JWT_SECRET, {
-      expiresIn: "1hr"
-    })
-
-    const refresh_token = jwt.sign({
+    const tokens = generateToken({
       id: validUser._id
-    }, process.env.VITE_REFRESH_JWT_SECRET, {
-      expiresIn: "1d"
-    })
+    });
 
-    res.status(200).cookie('token', refresh_token, {
+    await saveToken(validUser._id, tokens.refreshToken);
+
+    const refreshTokenData = await Token.findOne({
+      user: validUser._id
+    });
+
+    if (!refreshTokenData) {
+      return next(errorHandler(404, 'Refresh token not found'));
+    }
+
+    res.cookie('refreshToken', tokens.refreshToken, {
       httpOnly: true,
-      secure: false,
-      maxAge: 1 * 24 * 60 * 60 * 1000 //matches refresh token
-    })
+      secure: false, // Set to true if using HTTPS
+      maxAge: 60 * 60 * 1000 // matches the refresh token expiration time
+    });
 
     res.json({
       success: true,
       message: "Successfully signed in",
       statusCode: res.statusCode,
-      currentUser: access_token
+      data: {
+        user: validUser._id,
+        tokens
+      }
     })
 
   } catch (error) {
