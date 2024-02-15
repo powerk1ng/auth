@@ -28,7 +28,7 @@ export const authMiddleware = async (req, res, next) => {
 
         } catch (error) {
             console.log('error catch:', error)
-            return next(errorHandler(401, 'error'))
+            return next(errorHandler(401, 'Unauthorized'))
         }
 
 
